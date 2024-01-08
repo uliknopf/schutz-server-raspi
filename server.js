@@ -55,12 +55,12 @@ const server = http.createServer((req, res) => {
   // Checke API-Methode und URL
   if (req.method === 'GET' && req.url === '/meinURL' ) {
     // Checke, ob IP-Adresse schon als "böse" gemeldet ist
-	// oder ob mehr als einmal pro Sekunde ein Request gestellt wurde
+	  // oder ob mehr als einmal pro Sekunde ein Request gestellt wurde
     if (ipZeitinfo[ipAddress] && ((now - ipZeitinfo[ipAddress] < timeFrame)||ipBanList[ipAddress])) {
       //setze IP-Banned-Liste auf true
       ipBanList[ipAddress] = true;
       // Die Antwort des Servers an den "bösen" - Daten liefern
-      res.statusCode = 403;// Forbidden
+      res.statusCode = 403;// Verboten
       res.end('NoNo');
       } else {
 		// Update Zeitmessung des letzten Requests
@@ -72,9 +72,9 @@ const server = http.createServer((req, res) => {
         });
       }
     }
-	//Abbruchbedingung des Servers
-	else if (req.method === 'GET' && req.url === '/unsagbarSchwereURL'){server.close();
-	res.statusCode = 200;// beenden
+	else if (req.method === 'GET' && req.url === '/unsagbarSchwereURL'){//Abbruchbedingung des Servers
+    server.close();
+	  res.statusCode = 200;// beenden
     res.end('ByeBye');
 	}else { // alle anderen Anfragen sind falsch und zu ignorieren
     ipBanList[ipAddress] = true;
@@ -92,7 +92,6 @@ const server = http.createServer((req, res) => {
 		res.end('NoNo');
     }
 });
-
 const port = 9000;
 server.listen(port, () => {
 console.log(`Server läuft auf Port: ${port}`);
