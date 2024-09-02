@@ -2,9 +2,9 @@
 //als Zulieferer für Anfragen vom Internet, als Schutz für
 //Node-red Server.
 //GET liefert unter meinURL die Daten
-//nur 1  request-Anfrage pro Sekunde erlaubt.
+//nur 1  request-Anfrage all 2-Sekunden erlaubt.
 // falsche Anfragen -> IP Adresse wird "verbannt".
-// Anfragen mit richtiger URL werden NICHT verbannt.
+// Anfragen mit richtiger URL werden NICHT verbannt (meistens die eigene IP-Adresse).
 
 //Benötigte Module http und fs 
 const http = require('http');
@@ -45,7 +45,7 @@ const ipZeitinfo = {};
 // leeres Objekt erstellen, um "böse" IP-Adresse zu markieren
 const ipBanList = {};
 // Zeitintervall definieren
-const timeFrame = 1000; // 1 Sekunde
+const timeFrame = 2000; // 2 Sekunden
 
 const server = http.createServer((req, res) => {
 	// IP-Adresse ermitteln
@@ -63,21 +63,16 @@ const server = http.createServer((req, res) => {
 	}else {
 		// Checke API-Methode und URL
 		if (req.method === 'GET' && req.url === '/meinURL' ) {
-			// Update Zeitmessung des letzten Requests
+			// Update Zeitmessung des letzten Requests oder Zeitessungsbeginn
 			ipZeitinfo[ipAddress] = now;
 			//Server antwortet, weil alle Bedingungen erfüllt - Daten liefern
 			fetchy().then(databaseAnswer=>{
 				res.writeHead(200, { 'Content-Type': 'text/html' });
 				res.end(databaseAnswer);
 			});
-		}
-		 else if (req.method === 'GET' && req.url === '/unsagbarSchwereURL'){ //Abbruchbedingung des Servers
-		server.close();
-		res.statusCode = 200; // beenden
-		res.end('ByeBye');
 		}else { // alle anderen Anfragen sind falsch und zu ignorieren
 		ipBanList[ipAddress] = true;
-		// Update Zeitmessung des letzten Requests
+		// Zeitmessung des Requests erstellen; hier beginnt die Zeitmessung für 'unerwünschte' Anfragen
 		ipZeitinfo[ipAddress] = now;
 		// ZeitStempel erstellen
 		const zeitString=zeit.toString();
