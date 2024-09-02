@@ -5,6 +5,7 @@ Zur Übung soll mit internen Modulen ein HTTP-Server erstellt werden, der die Ze
 Zusammenfassend kann man sagen:
 1. zu schnelle Anfragen hintereinander werden gebremst und
 2. falsche URL-Anfragen werden in die schwarze Liste geschrieben (geloggt).<br>
+
 Interessant zu beobachten ist die Tatsache, daß die Schwarze Liste , die der Server anlegt (gebannte IP-Adressen), in der Woche um ca. 4 IP-Adressen anwächst. Im Internet kann man Infos zu diesen IP-Adressen bekommen [link Website criminalip][1]. Diese IP-Adressen sind wenig vertrauenserweckend, unabhängig vom Land (USA, China, Niederlande, England, Japan, ...).<br>
 Das Projekt ist nicht für den Einsatz in der Produktion gedacht, es ist nur für die Entwicklung gedacht, als Lehre und zum Ausprobieren wie ein Http-Server funktioniert.<br>
 
